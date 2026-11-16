@@ -1,3 +1,4 @@
+import 'package:knowledge_note/platforms/pages/search/search_home_page.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../mobile/mobile_home_page.dart';
@@ -35,7 +36,7 @@ class _DesktopHomeScreenState extends State<DesktopHomeScreen> {
           Expanded(
             child: IndexedStack(
               index: index,
-              children: [MobileHomePage(), MorePage()],
+              children: [MobileHomePage(), SearchHomePage(), MorePage()],
             ),
           ),
         ],

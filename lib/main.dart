@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:knowledge_note/core/controllers/i_controller.dart';
+import 'package:knowledge_note/core/controllers/note_controller.dart';
 import 'package:knowledge_note/core/utils/app_util.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:than_pkg_linux/than_pkg_linux.dart';
@@ -20,8 +22,8 @@ void main() async {
     );
   }
 
-  // ControllerManager.register(VFileController());
-  // ControllerManager.initAll();
+  ControllerManager.register(NoteController());
+  ControllerManager.initAll();
 
   runApp(const PlatformApp());
 }

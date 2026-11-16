@@ -5,7 +5,6 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   than_pkg_linux
   url_launcher_linux
-  media_kit_video
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

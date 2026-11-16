@@ -28,7 +28,7 @@ class MorePage extends StatelessWidget {
           DevRouteTile(),
           AppAboutDialogListTile(
             descText: 'Knowledge Note Application.',
-            iconAssetPath: 'assets/logo/logo.png',
+            iconAssetPath: 'assets/logo/app_logo.png',
           ),
         ],
       ),

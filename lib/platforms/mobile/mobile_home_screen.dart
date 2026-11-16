@@ -1,8 +1,8 @@
 import 'package:knowledge_note/platforms/mobile/mobile_home_page.dart';
+import 'package:knowledge_note/platforms/pages/search/search_home_page.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../pages/more/more_page.dart';
-
 
 class MobileHomeScreen extends StatefulWidget {
   const new({super.key});
@@ -18,7 +18,7 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
     return Scaffold(
       body: IndexedStack(
         index: index,
-        children: [MobileHomePage(), MorePage()],
+        children: [MobileHomePage(), SearchHomePage(), MorePage()],
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: index,
@@ -30,7 +30,7 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
         destinations: [
           NavigationDestination(
             icon: Icon(Icons.home_outlined),
-            label: 'Video',
+            label: 'Notes',
           ),
           NavigationDestination(
             icon: Icon(Icons.search_outlined),
