@@ -1,5 +1,9 @@
 import 'package:knowledge_note/core/controllers/i_controller.dart';
 import 'package:knowledge_note/core/controllers/note_controller.dart';
+import 'package:knowledge_note/core/models/note.dart';
+import 'package:knowledge_note/platforms/components/note_image.dart';
+import 'package:knowledge_note/platforms/components/sheets/note_item_menu_sheet.dart';
+import 'package:knowledge_note/ui/index.dart';
 import 'package:material_ui/material_ui.dart';
 
 class NoteList extends StatefulWidget {
@@ -12,6 +16,14 @@ class NoteList extends StatefulWidget {
 class _NoteListState extends State<NoteList> {
   final con = ControllerManager.read<NoteController>();
 
+  void goNoteDetail(Note note) async {}
+
+  void showItemMenu(Note note) async {
+    NoteItemMenuSheet.show(context, note);
+  }
+
+  ColorScheme get col => context.colorScheme;
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -21,15 +33,16 @@ class _NoteListState extends State<NoteList> {
           padding: .all(10),
           sliver: SliverMainAxisGroup(
             slivers: [
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Text(
-                    'Recently Added',
-                    style: Theme.of(context).textTheme.titleSmall,
+              if (con.list.isNotEmpty)
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Text(
+                      'Recently Added',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
                   ),
                 ),
-              ),
               if (con.list.isNotEmpty) _listWidget(),
             ],
           ),
@@ -45,32 +58,60 @@ class _NoteListState extends State<NoteList> {
       itemCount: con.list.length,
       itemBuilder: (context, index) {
         final note = con.list[index];
-        return Row(
-          spacing: 10,
-          children: [
-            SizedBox(width: 70, height: 70, child: Placeholder()),
-            Expanded(
+        return GestureDetector(
+          onTap: () => goNoteDetail(note),
+          onSecondaryTap: () => showItemMenu(note),
+          onLongPress: () => showItemMenu(note),
+          child: MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: Container(
+              padding: .symmetric(vertical: 5, horizontal: 10),
+              decoration: BoxDecoration(
+                color: col.surfaceContainer,
+                borderRadius: .circular(14),
+              ),
               child: Column(
-                spacing: 10,
                 crossAxisAlignment: .start,
+                spacing: 6,
                 children: [
-                  Text(note.englishName),
-                  Text(note.myanmarName),
-                  // FilledButton(
-                  //   onPressed: () {
-                  //     con.delete(note);
-                  //   },
-                  //   child: Text('Delete'),
-                  // ),
+                  Row(
+                    spacing: 10,
+                    children: [
+                      SizedBox(
+                        width: 70,
+                        height: 70,
+                        child: NoteImage(note: note),
+                      ),
+                      Expanded(
+                        child: Column(
+                          spacing: 10,
+                          crossAxisAlignment: .start,
+                          children: [
+                            Text(
+                              note.englishName,
+                              style: TextStyle(fontSize: 16, fontWeight: .w600),
+                            ),
+                            Text(
+                              note.myanmarName,
+                              style: TextStyle(fontSize: 16, fontWeight: .w600),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Icon(Icons.arrow_forward_ios_rounded),
+                    ],
+                  ),
+                  if (note.description.isNotEmpty)
+                    Text(
+                      note.description,
+                      style: TextStyle(fontSize: 11, fontWeight: .w200),
+                      maxLines: 3,
+                    ),
                 ],
               ),
             ),
-
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.arrow_forward_ios_rounded),
-            ),
-          ],
+          ),
         );
       },
     );

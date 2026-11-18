@@ -1,10 +1,9 @@
 import 'package:dart_core_extensions/dart_core_extensions.dart';
 import 'package:knowledge_note/core/controllers/i_controller.dart';
 import 'package:knowledge_note/core/controllers/note_controller.dart';
-import 'package:knowledge_note/core/models/knowledge_note.dart';
 import 'package:knowledge_note/core/utils/platform_util.dart';
 import 'package:knowledge_note/platforms/components/note_list.dart';
-import 'package:knowledge_note/platforms/pages/note_forms/note_form_page.dart';
+import 'package:knowledge_note/routers.dart';
 import 'package:knowledge_note/ui/index.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -39,11 +38,16 @@ class _MobileHomePageState extends State<MobileHomePage> {
   }
 
   void newNote() async {
-    final note = await context.push<KnowledgeNote>(
-      builder: (context) => NoteFormPage(note: .createEmpty()),
+    final resp = await goNoteFormPage(
+      context,
+      .createEmpty(),
+      respImageType: .none,
     );
-    if (note == null) return;
-    con.add(note);
+    if (resp == null) return;
+    final newNote = await con.add(resp.note);
+    if (resp.imageBytes != null && newNote != null) {
+      con.addNoteImage(newNote, resp.imageBytes!);
+    }
   }
 
   @override
@@ -60,7 +64,13 @@ class _MobileHomePageState extends State<MobileHomePage> {
         onPressed: newNote,
         child: Icon(Icons.add_card_outlined),
       ),
-      body: CustomScrollView(slivers: [NoteList()]),
+      body: RefreshIndicator.adaptive(
+        onRefresh: init,
+        child: CustomScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          slivers: [NoteList()],
+        ),
+      ),
     );
   }
 }
